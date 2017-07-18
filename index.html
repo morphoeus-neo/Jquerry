@@ -1,0 +1,110 @@
+<!doctype html>
+
+
+
+
+<html>
+	<head>
+		<title>Page Title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0">
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+
+              
+	</head>
+
+	<body>
+        
+        <input type="text" required id="inputFruit"> 
+        <button type="button" id="btAddFruit">Ajouter</button>
+        <button type="button" id="btAddFruitBefore">Ajouter Avant</button>
+        <button type="button" id="btReplaceFruit">Remplacer le premier élément</button>
+        <button type="button" id="btJqAdd">Ajoute_JQUERY</button>
+        <button type="button" id="btJqAddFruitBefore">Ajouter Avant _JQUERY</button>
+        <button type="button" id="btJqReplaceFruit">Remplacer le premier élément _JQUERY</button>
+        
+        <ul id="list">
+            <li>Pommes <button>supprimer</button></li>
+            <li>Poires <button>supprimer</button></li>
+        </ul>
+        
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        
+        <script>
+            //Les cibles
+            var $input = document.getElementById("inputFruit");
+            var $btAdd = document.getElementById("btAddFruit");
+            var $btAddBefore = document.getElementById("btAddFruitBefore");
+            var $btReplace = document.getElementById("btReplaceFruit");
+            var $list = document.getElementById("list");
+            
+            //Les gestionnaires
+            function getItemTobeInserted(){
+                $shadowLi = document.createElement("li");
+                $shadowLi.textContent = $input.value + " ";
+                
+                $shadowButton = document.createElement("button");
+                $shadowButton.textContent = "Supprimer";
+                $shadowButton.onclick = deleteItem;
+                
+                $shadowLi.appendChild($shadowButton);
+                
+                return $shadowLi;  
+            }
+            
+            function addItem(){
+                $list.appendChild(getItemTobeInserted());
+                
+                $input.value = "";
+                $input.focus();
+            }
+            
+            function addItemBefore(){
+                $list.insertBefore(getItemTobeInserted(), $list.firstChild);
+                
+                $input.value = "";
+                $input.focus();
+            }
+            
+            function replaceItem(){
+                $shadowLi = getItemTobeInserted();
+                $list.replaceChild($shadowLi, $list.firstElementChild);
+            }
+            
+            function deleteItem(ev){
+                //console.log(ev);
+                ev.path[2].removeChild(ev.path[1]);
+            }
+            
+            //Les événements
+            $btAdd.onclick = addItem;
+            $btAddBefore.onclick = addItemBefore;
+            $btReplace.onclick = replaceItem;
+            
+            //Gestion des boutons supprimer
+            $deleteButtons = $list.querySelectorAll("button");
+            $deleteButtons.forEach(function(item){
+                item.onclick = deleteItem;
+            });
+            
+            //JQUERY
+            
+            $("#btJqAdd").click(function(evt){
+                var newFruit = $("#inputFruit").val();
+                var $li = $("<li>").text(newFruit);
+               
+                $("#list").append($li);
+            });
+            
+            
+        </script>$(document).ready(function($){
+
+                 });
+jQuery(document).ready(function($){
+
+});
+
+
+	</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "toto",
+  "description": "un projet qui arrache",
+  "main": "",
+  "keywords": [
+    "toto"
+  ],
+  "authors": [
+    "aurelien courgeau"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

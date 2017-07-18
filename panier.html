@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Panier</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+
+
+</head>
+<body class="container-fluid">
+
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <form id="form">
+            <div class="form-group">
+                 <label for="designation">Désignation</label>
+            <input type="text" id="designation" class="form-control" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="Qt">Qt</label>
+                <input type="number" id="qt" class="form-control" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="pu">Prix Unitaire</label>
+                <input TYPE="number" STEP="0.01" id="pu" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-danger" type="submit">Valider!</button>
+            </div>
+        </form>
+        <table class="table" id="panier">
+            <thead>
+            <tr>
+                <th>Désignation</th>
+                <th>Prix Unitaire</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <td colspan="4" id="total">TOTAL</td>
+                    <td colspan="2" id="totalPanier">TOTAL Panier</td>
+                </tr>
+            </tfoot>
+            <tbody>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var $form = $("#form");
+        var $panier = $("#panier");
+
+        function ajoutProduit(evenement) {
+            //eviter le rechargement de la page a la sousmission
+            evenement.preventDefault();
+            //Récuperation des données saisies
+            var designation = $("#designation").val();
+            var pu = $("#pu").val();
+            var qt = $("#qt").val();
+            var total = pu * qt ;
+
+            //insertion de la ligne
+
+            // on commence par créer un "tr" détaché du DOM
+            // par convention on utilise le signe $ pour reperer des éléments du DOM!
+
+            var $tr =$("<tr>");
+            // on définit la variable pour le <td> de désignation
+         //   var $colDesignation = $("<td>").text(designation);
+            //j'ajoutes a TR
+           // $tr.append($colDesignation);
+            // $("<td>") créé un td avec la saisie de désignation ajouté a TR
+            $("<td>").text(designation).appendTo($tr);
+            $("<td>").text(pu).appendTo($tr);
+            $("<td>").text(qt).appendTo($tr);
+            $("<td>").text(total).appendTo($tr);
+
+            /*
+             *   Ajout du bouton de Suppression qui est dans la fonction d'ajout de ligne
+             *   puisque le bouton est dans la ligne rajouter
+             */
+            var $btSuppr = $("<button>").attr({
+                type: "button",
+                class: "btn btn-danger glyphicon glyphicon-trash",
+                title: "Supprimer cette ligne"
+
+            });
+
+
+            $("<td>").append($btSuppr).appendTo($tr);
+
+            $("#panier tbody").append($tr);
+            calculerTotal();
+
+        }
+
+        /*
+         *   pour activer le bouton supprimer on va devoir récupérer le Grand parent de la ligne
+         *
+         * on va donc créer une fonction pour supprimer
+         *
+         */
+        function supprimerProduit(evenement) {
+            console.log(evenement);
+
+            // Attention pas de guillemet a (this)
+            $(this).closest("tr");
+            //
+               //$(this).parent().parent().remove();
+               calculerTotal();
+
+        }
+        function calculerTotal() {
+
+            var $coloneTotal = $("#panier tbody tr td:nth-of-type(4n)");
+            var total = $coloneTotal
+                .toArray()
+                .map(function (item) {
+                    return parseFloat(item.textContent);
+                })
+                .reduce(function (total, val) {
+                    return total + val ;
+                });
+
+            $("#totalPanier").text(total);
+
+
+
+
+
+        }
+
+
+        // on lie la fonction a l'évenement
+
+        $form.submit(ajoutProduit)
+
+        $panier.delegate(".glyphicon-trash","click", supprimerProduit)
+
+
+    });
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+
+</body>
+</html>
